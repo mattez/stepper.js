@@ -77,9 +77,9 @@
             const events = is_touch_device() ? 'touchstart' : 'mousedown';
             var _this = this;
 
-            spinner.find('[data-spinner-button]')
+            spinner.find('[spinner-button]')
                 .on(events, function () {
-                    const type = $(this).attr('data-spinner-button');
+                    const type = $(this).attr('spinner-button');
                     if (type === 'up') {
                         $.fn.stepper.increase.call(_this);
                     } else {
@@ -87,7 +87,7 @@
                     }
                 })
                 .on('mousedown', function () {
-                    const type = $(this).attr('data-spinner-button');
+                    const type = $(this).attr('spinner-button');
                     $(this).data('timer', setTimeout(() => {
                         timeout = setInterval(() => {
                             if (type === 'up') {
@@ -112,9 +112,15 @@
          */
         $.fn.stepper.increase = function () {
             let current = parseFloat(getValue.call(this));
+            let newValue;
             this.settings = $(this).data('settings');
             const decimals = findDecimals(this.settings.step);
-            const newValue = (current + parseFloat(this.settings.step)).toFixed(decimals);
+            let x = current / parseFloat(this.settings.step);
+            if (this.settings.step !== 1 && x % 1 !== 0) {
+                newValue = ((Math.floor(x) + 1) * parseFloat(this.settings.step)).toFixed(decimals);
+            } else {
+                newValue = (current + parseFloat(this.settings.step)).toFixed(decimals);
+            }
             const currentValue = $(this).val();
             updateValue.call(this, newValue, currentValue);
         };
@@ -124,9 +130,15 @@
          */
         $.fn.stepper.decrease = function () {
             let current = parseFloat(getValue.call(this));
+            let newValue;
             this.settings = $(this).data('settings');
             const decimals = findDecimals(this.settings.step);
-            const newValue = (current - parseFloat(this.settings.step)).toFixed(decimals);
+            let x = current / parseFloat(this.settings.step);
+            if (this.settings.step !== 1 && x % 1 !== 0) {
+                newValue = (Math.floor(x) * parseFloat(this.settings.step)).toFixed(decimals);
+            } else {
+                newValue = (current - parseFloat(this.settings.step)).toFixed(decimals);
+            }
             const currentValue = $(this).val();
             updateValue.call(this, newValue, currentValue);
         };
