@@ -74,7 +74,7 @@
          */
         const bindEvents = function () {
             const spinner = $(this).closest('.js-spinner');
-            const events = is_touch_device() ? 'touchstart' : 'mousedown';
+            const events = is_touch_device() ? 'mousedown' : 'mousedown';
             var _this = this;
 
             spinner.find('[data-spinner-button]')
